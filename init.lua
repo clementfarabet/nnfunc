@@ -36,10 +36,10 @@ function nnfunc.functionalize(mod)
                   o.gradWeight = data.gradWeight or o.gradWeight -- grads are optionally user-provided
                   o.gradBias = data.gradBias or o.gradBias
                   o.gradInput = data.gradInput or o.gradInput
-                  if data.gradWeight then
+                  if o.gradWeight then
                      o.gradWeight:zero()
                   end
-                  if data.gradBias then
+                  if o.gradBias then
                      o.gradBias:zero()
                   end
                   local input = data.input

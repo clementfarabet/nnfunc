@@ -167,6 +167,71 @@ local tests = {
       tester:asserteq(res.gradWeight:size(2), 10, 'incorrect gb size')
       tester:asserteq(res.gradBias:size(1), 100, 'incorrect gb size')
    end,
+
+   CheckLinearGrads = function()
+      -- Groundtruth states:
+      local layer = nn.Linear(10,100)
+      local gradOutput = torch.randn(100)
+      local input = torch.randn(10)
+      layer:zeroGradParameters()
+      local output = layer:forward(input)
+      local gradInput = layer:backward(input,gradOutput)
+
+      -- Simple module:
+      local layerTest = nnfunc.nn.Linear(10,100)
+
+      -- Fprop:
+      local res = layerTest({
+         input = input,
+         weight = layer.weight, bias = layer.bias,
+      })
+
+      -- Asserts:
+      tester:asserteq((res.output - output):abs():max(), 0, 'incorrect output state')
+
+      -- Bprop:
+      local res = layerTest({
+         input = input,
+         weight = layer.weight, bias = layer.bias,
+         gradOutput = gradOutput,
+      })
+
+      -- Asserts:
+      tester:asserteq((res.gradInput - gradInput):abs():max(), 0, 'incorrect gradInput state')
+      tester:asserteq((res.gradWeight - layer.gradWeight):abs():max(), 0, 'incorrect gradWeight state')
+      tester:asserteq((res.gradBias - layer.gradBias):abs():max(), 0, 'incorrect gradBias state')
+
+      -- Repeat tests above, but now user provides all tensors:
+      local layerTest2 = nnfunc.nn.Linear(10,100)
+
+      -- Fprop:
+      local userOutput = torch.Tensor(100)
+      layerTest2({
+         input = input,
+         weight = layer.weight, bias = layer.bias,
+         output = userOutput
+      })
+
+      -- Asserts:
+      tester:asserteq((userOutput - output):abs():max(), 0, 'incorrect output state')
+
+      -- Bprop:
+      local userGradInput = torch.Tensor(10)
+      local userGradWeight = torch.Tensor(100,10)
+      local userGradBias = torch.Tensor(100)
+      layerTest2({
+         input = input,
+         weight = layer.weight, bias = layer.bias,
+         gradOutput = gradOutput,
+         gradInput = userGradInput,
+         gradWeight = userGradWeight, gradBias = userGradBias,
+      })
+
+      -- Asserts:
+      tester:asserteq((userGradInput - gradInput):abs():max(), 0, 'incorrect gradInput state')
+      tester:asserteq((userGradWeight - layer.gradWeight):abs():max(), 0, 'incorrect gradWeight state')
+      tester:asserteq((userGradBias - layer.gradBias):abs():max(), 0, 'incorrect gradBias state')
+   end,
 }
 
 -- Run tests:
