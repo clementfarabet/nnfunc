@@ -4,6 +4,12 @@ Functionalize nn modules: the goal of this package is to make it
 easy to develop 3rd-party frameworks, by re-exposing nn modules
 as functions. Basically provide a functional API to nn.
 
+Every instantiated module becomes a simple state-less function:
+input data and parameters must be provided as inputs to this function;
+same thing for gradients. For convenience and efficiency, the state
+of the underlying nn module is still relied on for caching (every function
+returned by nnfunc is a closure relying on an instantiated nn module).
+
 ## API
 
 ### Expose packages
