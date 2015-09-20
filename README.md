@@ -38,6 +38,14 @@ prediction = layer({
 --    output = torch.Tensor(100)
 -- }
 
+-- output can be user-provided, optionally:
+prediction = layer({
+   input = torch.randn(10),
+   weight = torch.randn(100,10), bias = torch.randn(100),
+   output = torch.Tensor(100),
+})
+-- output is now valid
+
 -- compute gradients (backprop) - this happens automatically
 -- because gradOutput is provided:
 grads = layer({

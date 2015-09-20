@@ -127,6 +127,24 @@ local tests = {
       tester:asserteq(res.gradInput:size(1), 10, 'incorrect size')
    end,
 
+   ProvideOutput = function()
+      -- Simple module:
+      local layer = nnfunc.nn.Linear(10,100)
+
+      -- Bprop:
+      local res = layer({
+         input = torch.randn(10),
+         output = torch.Tensor(100),
+         weight = torch.randn(100,10), bias = torch.randn(100),
+      })
+
+      -- Asserts:
+      tester:asserteq(_.count(res), 1, 'expected 1 value in response')
+      tester:asserteq(torch.typename(res.output), 'torch.DoubleTensor', 'incorrect return type')
+      tester:asserteq(res.output:dim(), 1, 'incorrect nb of dims')
+      tester:asserteq(res.output:size(1), 100, 'incorrect size')
+   end,
+
    ProvideGrads = function()
       -- Simple module:
       local layer,gradLayer = nnfunc.nn.Linear(10,100)
