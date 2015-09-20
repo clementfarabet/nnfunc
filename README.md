@@ -2,7 +2,7 @@
 
 Functionalize nn modules: the goal of this package is to make it
 easy to develop 3rd-party frameworks, by re-exposing nn modules
-as functions.
+as functions. Basically provide a functional API to nn.
 
 ## API
 

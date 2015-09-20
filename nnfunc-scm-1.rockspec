@@ -7,7 +7,7 @@ source = {
 }
 
 description = {
-   summary = "NN primitives for functional programming.",
+   summary = "Functional API for nn",
    homepage = "https://github.com/clementfarabet/nnfunc",
    license = "MIT",
 }
