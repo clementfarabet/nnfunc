@@ -8,17 +8,20 @@ as functions. Basically provide a functional API to nn.
 
 ### Expose packages
 
-Any package that provides nn.Module children can be exposed.
+Any package that provides `nn.Module` children can be exposed.
 
 ```lua
-nnfunc.functionalize 'nn'   -- done by default
+nnfunc.functionalize 'nn'   -- done by default by nnfunc
 nnfunc.functionalize 'nnx'  -- bundle new package...
 ```
 
+Once called, every module in the source package is available to
+use as a function; see examples below.
+
 ### API #1
 
-A single function that automatically compute gradients
-depending on arguments provided.
+A single function that evaluates the module, and automatically
+computes gradients if `gradOutput` is provided.
 
 ```lua
 -- this returns a function that can be used to eval this module and
