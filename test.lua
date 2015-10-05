@@ -232,6 +232,37 @@ local tests = {
       tester:asserteq((userGradWeight - layer.gradWeight):abs():max(), 0, 'incorrect gradWeight state')
       tester:asserteq((userGradBias - layer.gradBias):abs():max(), 0, 'incorrect gradBias state')
    end,
+
+   Float = function()
+      -- Simple module:
+      local layer = nnfunc.nn.Linear(10,100)
+
+      -- Fprop:
+      local res = layer({
+         input = torch.randn(10):float(),
+         weight = torch.randn(100,10):float(), bias = torch.randn(100):float()
+      })
+      local res = layer({
+         input = torch.randn(10):float(),
+         weight = torch.randn(100,10):float(), bias = torch.randn(100):float()
+      })
+
+      -- Asserts:
+      tester:asserteq(torch.typename(res.output), 'torch.FloatTensor', 'incorrect return type')
+
+      -- Bprop:
+      local res = layer({
+         input = torch.randn(10):float(),
+         weight = torch.randn(100,10):float(), bias = torch.randn(100):float(),
+         gradOutput = torch.randn(100):float(),
+      })
+
+      -- Asserts:
+      tester:asserteq(torch.typename(res.gradInput), 'torch.FloatTensor', 'incorrect return type')
+      tester:asserteq(torch.typename(res.gradWeight), 'torch.FloatTensor', 'incorrect return type')
+      tester:asserteq(torch.typename(res.gradBias), 'torch.FloatTensor', 'incorrect return type')
+   end,
+
 }
 
 -- Run tests:

@@ -59,6 +59,9 @@ function nnfunc.functionalize(mod)
                      -- compute gradients
                      return g(data)
                   else
+                     -- auto-type
+                     o:type(data.input:type())
+
                      -- compute output
                      o.weight = data.weight -- weight+bias are always user-provided
                      o.bias = data.bias

@@ -10,11 +10,6 @@ same thing for gradients. For convenience and efficiency, the state
 of the underlying nn module is still relied on for caching (every function
 returned by nnfunc is a closure relying on an instantiated nn module).
 
-## TODO
-
-* auto-type: type of underlying module should be automatlly set at runtime,
-  given input type
-
 ## API
 
 ### Expose packages
